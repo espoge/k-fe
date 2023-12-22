@@ -10,10 +10,10 @@ import useAlert from './useAlert'
  * */
 
 const useError = () => {
-    const { triggerAlert } = useAlert()
+    const { error } = useAlert()
 
     return useCallback(errorMessage => {
-        triggerAlert({ severity: 'error', title: errorMessage })
+        error(errorMessage)
     }, [])
 }
 

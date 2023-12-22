@@ -72,6 +72,17 @@ export const groupByDate = (array) => {
     }, Object.create(null));
 }
 
+export const groupByCustomDate = (array) => {
+    return array.reduce(function (r, a) {
+        r[a.date] = r[a.date] || [];
+        r[a.date].push(a)
+        return r
+    }, Object.create(null));
+}
+
+
+
+
 export const reorderItems = (list, startIndex, endIndex) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);

@@ -13,6 +13,9 @@ import {handleApiError} from "../../utilities/helpers";
 import useError from "../../hooks/useError";
 import Logo from "../../components/Logo";
 import useUser from "../../hooks/useUser";
+import { useContext } from 'react';
+import { AlertContext } from '../../context/AlertProvider.js';
+
 
 const useStyles = createUseStyles(theme => ({
     formTitle: {
@@ -51,6 +54,7 @@ const useStyles = createUseStyles(theme => ({
 }))
 
 const Login = () => {
+
     const showError = useError();
     const {createUser} = useUser();
     const [showPassword, setShowPassword] = useState(false);

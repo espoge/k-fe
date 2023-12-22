@@ -2,7 +2,6 @@ import {createUseStyles} from "react-jss";
 import SearchBar from "../../../components/SearchBar";
 import FilterButton from "../../../components/FilterButton";
 import {useNavigate} from "react-router-dom";
-import {ROUTE_COMPLETED} from "../../../utilities/constants";
 import ControlledSelect from "../../../components/ControlledSelect";
 import DatePickerInput from "../../../components/DatePickerInput";
 import {TASK_PRIORITIES} from "../../../models/task";
@@ -67,7 +66,7 @@ const useStyles = createUseStyles(theme => ({
     }
 }))
 
-const FilterBar = ({onPriorityHandler = Function.prototype, onSearchHandler = Function.prototype, dateFilter, onDateChangeHandler = Function.prototype}) => {
+const FilterBar = ({onPriorityHandler = Function.prototype, onSearchHandler = Function.prototype, dateFilter, onDateChangeHandler = Function.prototype, navigation}) => {
 
     const navigate = useNavigate();
     const classes = useStyles();
@@ -87,7 +86,7 @@ const FilterBar = ({onPriorityHandler = Function.prototype, onSearchHandler = Fu
                 isClearable
                 options={TASK_PRIORITIES}
             />
-            <FilterButton onClickCallback={() => navigate(ROUTE_COMPLETED) }>Completed</FilterButton>
+            <FilterButton onClickCallback={() => navigate(navigation.route) }>{navigation.label}</FilterButton>
         </div>
         <div className={classes.search}>
             <SearchBar className={classes.searchBar} onSearchCallback={onSearchHandler}/>

@@ -21,6 +21,10 @@ const TasksAPI = {
     orderTasks:(data) => {
         const url = '/todos/order'
         return axios.post(url,{todos:[...data]})
+    },
+    completedTasks:(page) => {
+        const url = `/todos/completed?page=${page}`
+        return axios.get(url)
     }
 }
 

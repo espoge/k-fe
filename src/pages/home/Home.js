@@ -21,6 +21,9 @@ import TodoInputBar from "./todo-input-bar/TodoInputBar";
 import FilterBar from "./filter-bar/FilterBar";
 import {useWindowSize} from "../../hooks/useWindowSize";
 import EditTaskModal from "./EditTaskModal";
+import { TASK_MODEL } from "../../models";
+import useAlert from "../../hooks/useAlert";
+import { ROUTE_COMPLETED } from "../../utilities/constants";
 
 const useStyles = createUseStyles(theme => ({
     taskBodyRoot: {
@@ -41,7 +44,7 @@ const useStyles = createUseStyles(theme => ({
         fontSize: 14,
         fontWeight: 500,
         color: theme.palette.common.textBlack,
-    }
+    },
 }))
 
 const Homepage = () => {
@@ -52,6 +55,7 @@ const Homepage = () => {
     const [priority, setPriority] = useState(false);
     const [openedTask, setOpenedTask] = useState(null);
     const [showEditModal, setShowEditModal] = useState(false);
+    const {success} = useAlert()
 
     const classes = useStyles();
 
@@ -84,6 +88,9 @@ const Homepage = () => {
         try {
             const {data} = await TasksAPI.editTask(newTask);
             onUpdateItem(oldTask,data)
+           if(newTask.is_completed) {
+            success('Welldone')
+           }
         } catch (error) {
             handleApiError({
                 error,
@@ -234,14 +241,17 @@ const Homepage = () => {
         [tasks, dateFilter, searchInput, priority]
     )
 
+     
+
     return <>
         <FilterBar
             onSearchHandler={setSearchInput}
             onDateChangeHandler={setDateFilters}
             dateFilter={dateFilter}
             onPriorityHandler={setPriority}
+            navigation={{label: 'Completed', route: ROUTE_COMPLETED}}
         />
-        <HomeTableHeader/>
+        <HomeTableHeader />
         <Container className={classes.taskBodyRoot}>
             <Row>
                 <Column start={2} span={10}>
@@ -286,6 +296,7 @@ const Homepage = () => {
                 onClose={() => {
                     setShowEditModal(false)
                 }}
+                onUpdateCb={onEditTask}
                 task={openedTask}
             />
         )}

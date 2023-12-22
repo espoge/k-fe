@@ -1,4 +1,6 @@
-import {createUseStyles} from 'react-jss'
+import {createUseStyles } from 'react-jss'
+import {forwardRef} from "react"
+
 import cx from "classnames";
 
 const useStyles = createUseStyles((theme) => ({
@@ -12,11 +14,11 @@ const useStyles = createUseStyles((theme) => ({
     }),
 }))
 
-const Container = ({size = 1320, children, className, ...rest}) => {
+const Container = forwardRef (({size = 1320, children, className, ...rest}, ref)=>{
     const classes = useStyles({size})
-    return <div className={cx(classes.container, className)} {...rest}>
+    return <div ref={ref} className={cx(classes.container, className)} {...rest}>
         {children}
-    </div>
-}
+    </div> 
+})
 
 export default Container

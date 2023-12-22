@@ -6,6 +6,8 @@ const SET_ALERT_DATA_ACTION = 'SET_ALERT_DATA'
 const SET_VISIBILITY_ACTION = 'SET_VISIBILITY'
 const RESET_ALERT_ACTION = 'RESET_ALERT'
 const TRIGGER_ALERT_ACTION = 'TRIGGER_ALERT'
+const ADD_TOAST = 'ADD_TOAST'
+const DELETE_TOAST = 'DELETE_TOAST'
 
 const alertReducer = (state, action) => {
     switch (action.type) {
@@ -31,6 +33,19 @@ const alertReducer = (state, action) => {
                 isOpen: true,
                 data: action.payload,
             }
+        case ADD_TOAST:
+                return {
+                  ...state,
+                  toasts: [...state.toasts, action.payload],
+                };
+        case DELETE_TOAST:
+                const updatedToasts = state.toasts.filter(
+                  (toast) => toast.id !== action.payload
+                );
+                return {
+                  ...state,
+                  toasts: updatedToasts,
+                };            
         default:
             return state
     }
@@ -38,8 +53,7 @@ const alertReducer = (state, action) => {
 
 const AlertProvider = ({ children }) => {
     const initialState = {
-        isOpen: false,
-        data: {},
+        toasts:[]
     }
     const [alert, dispatch] = useReducer(alertReducer, initialState)
 
@@ -59,6 +73,32 @@ const AlertProvider = ({ children }) => {
         dispatch({ type: TRIGGER_ALERT_ACTION, payload })
     }, [])
 
+    const addToast = (type, message) => {
+        console.log(type, message)
+        const id = Math.floor(Math.random() * 10000000);
+        dispatch({ type: "ADD_TOAST", payload: { id, message, type } });
+      };
+      const success = (message) => {
+        addToast("success", message);
+      };
+
+      const error = (message) => {
+        addToast("error", message);
+      };
+
+      const warning = (message) => {
+        addToast("warning", message);
+      };
+
+      const info = (message) => {
+        addToast("info", message);
+      };
+
+
+      const remove = (id) => {
+        dispatch({ type: "DELETE_TOAST", payload: id });
+      };
+
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             closeAlert()
@@ -73,11 +113,16 @@ const AlertProvider = ({ children }) => {
             value={{
                 dispatchAlert: dispatch,
                 isAlertOpen: alert.isOpen,
-                alertData: alert.data,
+                alertData: alert,
                 closeAlert,
                 showAlert,
                 setAlertData,
                 triggerAlert,
+                success,
+                error,
+                warning,
+                info,
+                remove
             }}
         >
             {children}
